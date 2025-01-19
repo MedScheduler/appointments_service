@@ -74,6 +74,8 @@ async def get_appointment(user_id: str):
     doctors = {doctor['id']: doctor for doctor in external_data.get('data', [])}
     patients = {patient['id']: patient for patient in external_data.get('data', [])}
     reviews = {}
+    appointment_id=''
+    review = {}
     for review in external_review_data:
         appointment_id = review['appointment_id']
     if appointment_id not in reviews:
