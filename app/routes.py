@@ -32,7 +32,19 @@ async def get_appointment(appointment_id: str):
     appointment = await get_appointment_by_id(appointment_id)
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
+
+    user_ids  = [appointment["doctor_id"], appointment["user_id"]]
+    query_params = {"ids": user_ids}
+
+    response = requests.get("http://user_service:8006/user", params=query_params)
+    external_data = response.json()
+
+    doctor = {doctor['id']: doctor for doctor in external_data.get('data', [])}
+    patient = {patient['id']: patient for patient in external_data.get('data', [])}
+
     appointment["_id"] = str(appointment["_id"])
+    appointment["patient"] = patient[int(appointment.get("user_id"))]
+    appointment["doctor"] = doctor[int(appointment.get("doctor_id"))]
     return appointment
 
 # Buscar agendamentos por ID do paciente
