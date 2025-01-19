@@ -11,11 +11,12 @@ from app.models import Appointment  # Assumindo que seu modelo está no diretór
 def test_create_appointment():
     # Criação de uma instância de Appointment com dados fictícios
     appointment = Appointment(
-        user_id="123", 
-        service_id="abc", 
+        user_id="123",
+        doctor_id="321",
+        service_id="abc",
         date=datetime(2025, 1, 17, 14, 30)
     )
-    
+
     # Verificando se os dados foram atribuídos corretamente
     assert appointment.user_id == "123"
     assert appointment.service_id == "abc"
@@ -28,11 +29,12 @@ def test_create_appointment():
 def test_default_values():
     # Criação de uma instância de Appointment sem fornecer valores de status, created_at, updated_at
     appointment = Appointment(
-        user_id="456", 
-        service_id="def", 
+        user_id="456",
+        doctor_id="654",
+        service_id="def",
         date=datetime(2025, 1, 18, 15, 00)
     )
-    
+
     # Verificando se o valor padrão de status foi atribuído corretamente
     assert appointment.status == "Aguardando Confirmação"
     assert appointment.created_at is not None
@@ -42,7 +44,7 @@ def test_default_values():
 def test_invalid_data():
     with pytest.raises(ValueError):  # Esperamos que lance um ValueError se o tipo de dado estiver errado
         Appointment(
-            user_id="123", 
-            service_id="abc", 
+            user_id="123",
+            service_id="abc",
             date="invalid_date"  # Data inválida, deve lançar um erro
         )
