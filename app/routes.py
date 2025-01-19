@@ -2,6 +2,7 @@ import requests
 from json import dumps
 from fastapi import APIRouter, HTTPException, status
 from app.models import Appointment, UpdateAppointment
+from app.kafka.producer import send_event
 from app.database import (
     insert_appointment, get_appointments, get_appointment_by_id, delete_appointment, update_appointment_in_db, get_appointment_by_user_id, get_appointment_by_doctor_id
 )
@@ -14,6 +15,7 @@ router = APIRouter()
 async def create_appointment(appointment: Appointment):
     appointment_data = appointment.dict()
     result = await insert_appointment(appointment_data)
+    send_event(appointment_data)
     return {"id": str(result.inserted_id), "message": "Appointment created successfully"}
 
 # Listar agendamentos
